@@ -1,0 +1,24 @@
+name: flutter_qris
+description: "Flutter QRIS Indonesia Library"
+version: 1.0.0
+publish_to: "https://pub.dev"
+homepage: "https://github.com/RohmanBenyRiyanto/qris"
+
+environment:
+  sdk: ^3.6.0
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  crclib: ^3.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+
+repository: "https://github.com/RohmanBenyRiyanto/qris"
