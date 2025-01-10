@@ -1,7 +1,6 @@
 name: flutter_qris
 description: "Flutter QRIS Indonesia Library"
 version: 1.0.0
-publish_to: "https://pub.dev"
 homepage: "https://github.com/RohmanBenyRiyanto/qris"
 
 environment:
@@ -22,3 +21,10 @@ dev_dependencies:
 flutter:
 
 repository: "https://github.com/RohmanBenyRiyanto/qris"
+
+topics:
+  - qr-code
+  - qris
+  - decoder
+  - qris-indonesia
+  - payment
