@@ -36,7 +36,6 @@ extension TipIndicatorExtension on TipIndicator {
   bool get isFixedTipPercentage => this == TipIndicator.fixedTipPercentage;
   bool get isNoTip => this == TipIndicator.noTip;
 
-
   /// Converts `TipIndicator` enum to its corresponding raw string for QRIS.
   ///
   /// - Returns: A string like "01", "02", or "03" based on the `TipIndicator` value:

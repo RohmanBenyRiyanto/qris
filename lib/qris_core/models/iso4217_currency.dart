@@ -204,6 +204,6 @@ class ISO4217Currency {
 
   @visibleForTesting
   void logDebugingCurrency() {
-      return toJson().toPrettyString().myLog();
+    return toJson().toPrettyString().myLog();
   }
 }

@@ -14,7 +14,6 @@ class MerchantLocation {
     return '$city, $countryCode, $postalCode';
   }
 
-
   Map<String, dynamic> toMap() {
     return {
       'city': city,

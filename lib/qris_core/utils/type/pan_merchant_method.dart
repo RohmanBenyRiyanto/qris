@@ -21,7 +21,8 @@ enum PANMerchantMethod {
 
 /// Utility extension for [PANMerchantMethod] providing additional functionalities.
 extension PANMerchantMethodExtension on PANMerchantMethod {
-  String get name  => toString().split('.').last;
+  String get name => toString().split('.').last;
+
   /// Retrieves the numeric identifier associated with the [PANMerchantMethod].
   ///
   /// ### Returns:

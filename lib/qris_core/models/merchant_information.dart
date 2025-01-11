@@ -22,7 +22,6 @@ class MerchantInformation {
     );
   }
 
-
   Map<String, dynamic> toJson() {
     return {
       'global_unique_identifier': globalUniqueIdentifier,

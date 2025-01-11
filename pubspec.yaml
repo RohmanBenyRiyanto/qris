@@ -1,5 +1,5 @@
 name: flutter_qris
-description: "Flutter QRIS Indonesia Library"
+description: "A Flutter library for decoding and processing QRIS (Quick Response Code Indonesian Standard) data, designed for payment applications."
 version: 1.0.1+1
 homepage: "https://github.com/RohmanBenyRiyanto/qris"
 

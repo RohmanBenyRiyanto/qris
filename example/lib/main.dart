@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 import 'package:flutter/material.dart';
 import 'package:flutter_qris/qris.dart';
 
@@ -30,8 +32,8 @@ class MyHomePage extends StatelessWidget {
         // '00020101021126590013ID.CO.BNI.WWW011893600009150305256502096102070790303UBE51440014ID.CO.QRIS.WWW0215ID20222337822690303UBE5204472253033605802ID5912VFS GLOBAL 66015JAKARTA SELATAN61051294062070703A016304D7C5';
         // Mandiri
         "00020101021126690021ID.CO.BANKMANDIRI.WWW01189360000801688405040211716884050410303UMI51440014ID.CO.QRIS.WWW0215ID10243580827810303UMI5204274153033605802ID5910kedai  all6015Tangerang (Kab)61051533862070703A0163041A47";
-        // Invalid
-        // "fewijnfjnfjif2";
+    // Invalid
+    // "fewijnfjnfjif2";
 
     return Scaffold(
       appBar: AppBar(
