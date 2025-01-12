@@ -1,9 +1,5 @@
-// ignore_for_file: unintended_html_in_doc_comment
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_qris/qris.dart';
-
-import '../utils/data/iso_4217_currency_data.dart';
 
 /// A class representing an ISO 4217 currency.
 ///
@@ -173,7 +169,7 @@ class ISO4217Currency {
   /// - `numCode` (int)
   /// - `digits` (int)
   /// - `currencyName` (String)
-  /// - `locations` (List<String>)
+  /// - `locations` List String
   factory ISO4217Currency.fromJson(Map<String, dynamic> json) {
     return ISO4217Currency(
       code: json['code'],
@@ -191,7 +187,7 @@ class ISO4217Currency {
   /// - `numCode` (int)
   /// - `digits` (int)
   /// - `currencyName` (String)
-  /// - `locations` (List<String>)
+  /// - `locations` List String
   Map<String, dynamic> toJson() {
     return {
       'code': code,

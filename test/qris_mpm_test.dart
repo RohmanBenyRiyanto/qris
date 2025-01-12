@@ -1,6 +1,4 @@
 import 'package:flutter_qris/qris.dart';
-import 'package:flutter_qris/qris_core/utils/type/pan_merchant_method.dart';
-import 'package:flutter_qris/qris_core/utils/type/point_of_initiation_method.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

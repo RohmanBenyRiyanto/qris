@@ -34,3 +34,13 @@ This version lays the foundation for future features and enhancements.
   - Improved handling of edge cases for invalid or incomplete QR codes.
 - Updated documentation for the decoder functions and QR code handling processes.
 - ADD new QRIS MPM TIP details.
+
+## [1.0.1+2]
+
+### DATE
+
+- 2025-01-12
+
+### RELEASE LOG
+
+- **Improved Import Handling**: Enhanced the import process to handle missing dependencies gracefully.

@@ -1,10 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_qris/qris.dart';
-import 'package:flutter_qris/qris_core/models/merchant_information.dart';
-import 'package:flutter_qris/qris_core/models/merchant_location.dart';
-import 'package:flutter_qris/qris_core/utils/extension/luhn_algorithm_extension.dart';
-import 'package:flutter_qris/qris_core/utils/type/merchant_criteria.dart';
-import 'package:flutter_qris/qris_core/utils/type/pan_merchant_method.dart';
 
 /// A class representing detailed information extracted from a Merchant QR Code.
 ///

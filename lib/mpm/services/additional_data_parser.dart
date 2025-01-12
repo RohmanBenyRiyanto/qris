@@ -1,9 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_qris/qris.dart';
 
-import '../../qris_core/models/tlv.dart';
-import '../../qris_core/services/tlv_service.dart';
-
 class AdditionalData with TLVService {
   final List<TLV> tlv;
 

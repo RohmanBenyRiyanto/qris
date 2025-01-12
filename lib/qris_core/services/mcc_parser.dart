@@ -1,7 +1,4 @@
 import 'package:flutter_qris/qris.dart';
-import 'package:flutter_qris/qris_core/utils/data/mcc_data.dart';
-
-import '../models/mcc.dart';
 
 /// A singleton helper class to work with MCC (Merchant Category Code) data.
 ///

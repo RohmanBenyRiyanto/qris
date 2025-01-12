@@ -13,7 +13,7 @@ To use the `flutter_qris` library in your Flutter project, add the following dep
 
 ```yaml
 dependencies:
-  flutter_qris: 1.0.1
+  flutter_qris: ^latest
 ```
 
 Make sure to run `flutter pub get` to install the dependencies.

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_qris/qris.dart';
-import 'package:flutter_qris/qris_core/utils/type/tip_indicator.dart';
 
 class MpmTip {
   final Map<String, dynamic> data;
