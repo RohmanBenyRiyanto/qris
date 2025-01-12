@@ -29,9 +29,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final String exampleData =
         // BNI
-        // '00020101021126590013ID.CO.BNI.WWW011893600009150305256502096102070790303UBE51440014ID.CO.QRIS.WWW0215ID20222337822690303UBE5204472253033605802ID5912VFS GLOBAL 66015JAKARTA SELATAN61051294062070703A016304D7C5';
-        // Mandiri
-        "00020101021126690021ID.CO.BANKMANDIRI.WWW01189360000801688405040211716884050410303UMI51440014ID.CO.QRIS.WWW0215ID10243580827810303UMI5204274153033605802ID5910kedai  all6015Tangerang (Kab)61051533862070703A0163041A47";
+        '00020101021126590013ID.CO.BNI.WWW011893600009150305256502096102070790303UBE51440014ID.CO.QRIS.WWW0215ID20222337822690303UBE5204472253033605802ID5912VFS GLOBAL 66015JAKARTA SELATAN61051294062070703A016304D7C5';
     // Invalid
     // "fewijnfjnfjif2";
 
@@ -51,7 +49,7 @@ class MyHomePage extends StatelessWidget {
               await Future.delayed(const Duration(milliseconds: 20));
               qRISMPM.additionalData.logDebugingAdditionalData();
               await Future.delayed(const Duration(milliseconds: 20));
-              qRISMPM.tip.logDebugingTip();
+              qRISMPM.transaction.logDebugingTip();
               await Future.delayed(const Duration(milliseconds: 20));
               qRISMPM.logDebugingCRC();
               await Future.delayed(const Duration(milliseconds: 20));

@@ -1,46 +1,49 @@
-# CHANGELOG FLUTTER QRIS
+# CHANGELOG - Flutter QRIS
 
-## [1.0.0]
+## [1.0.1+3]
 
-### Initial Release
+### Release Date: 2025-01-12
 
-## DATE
+### Release Log:
 
-- 2025-01-10
+- **Updated Transaction Parser**: Enhanced the transaction parser to support additional tip indicators.
+- **Improved Merchant Detail Parser**: Refined the merchant data parser for more accurate merchant details.
 
-### RELEASE LOG
+---
 
-- **Qris Library** initial version.
-- Currently, the library supports **MPM (Merchant Profile Message)** decoder functionality.
-- Added the necessary components for QR code generation and decoding for QRIS in Indonesia.
-- Provided a simple API for decoding the QRIS QR codes for merchant-related data.
+## [1.0.1+2]
 
-This version lays the foundation for future features and enhancements.
+### Release Date: 2025-01-12
+
+### Release Log:
+
+- **Enhanced Import Handling**: Improved the import process to gracefully handle missing dependencies.
 
 ---
 
 ## [1.0.1+1]
 
-### DATE
+### Release Date: 2025-01-10
 
-- 2025-01-10
+### Release Log:
 
-### RELEASE LOG
+- **Added Example Project**: Introduced a full example project demonstrating the usage of the QRIS library for decoding and displaying parsed merchant data.
+- **Core Decoder Improvements**: Enhanced the core QRIS MPM decoder for better performance and improved error handling.
+- **QRIS MPM Data Structure Update**: Reworked the internal structure of QRIS Merchant Profile Message (MPM) data to increase modularity and extensibility for future updates.
+  - Added additional fields for improved decoding accuracy.
+  - Enhanced handling of edge cases for incomplete or invalid QR codes.
+- **Updated Documentation**: Revamped the documentation for the decoder functions and QR code handling processes.
+- **New QRIS MPM TIP Details**: Added new details related to QRIS MPM tip functionality.
 
-- **Example Project**: Added a full example project showcasing the usage of the QRIS library for both decoding and displaying the parsed merchant data.
-- **Core Decoder Improvements**: Improved the core QRIS MPM decoder functionality, optimizing performance and enhancing error handling capabilities.
-- **QRIS MPM Data Structure Update**: Reworked the internal structure of QRIS Merchant Profile Message (MPM) data to make it more modular and extendable for future updates.
-  - Added additional fields to enhance decoding accuracy.
-  - Improved handling of edge cases for invalid or incomplete QR codes.
-- Updated documentation for the decoder functions and QR code handling processes.
-- ADD new QRIS MPM TIP details.
+---
 
-## [1.0.1+2]
+## [1.0.0]
 
-### DATE
+### Release Date: 2025-01-10
 
-- 2025-01-12
+### Initial Release:
 
-### RELEASE LOG
-
-- **Improved Import Handling**: Enhanced the import process to handle missing dependencies gracefully.
+- **Qris Library**: Initial version released.
+- **MPM Decoder**: Supports Merchant Profile Message (MPM) decoding functionality.
+- **QR Code Generation and Decoding**: Includes components for QR code generation and decoding specifically for QRIS in Indonesia.
+- **API**: A simple API provided for decoding QRIS QR codes related to merchant data.

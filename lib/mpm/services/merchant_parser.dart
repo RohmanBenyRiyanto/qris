@@ -21,19 +21,38 @@ import 'package:flutter_qris/qris.dart';
 class Merchant {
   final Map<String, dynamic> _raw;
 
+  /// List of base tag IDs (26, 27, 50, 51) used to extract merchant information.
+  final List<String> _baseTagIds = ['26', '27', '50', '51'];
+
   Merchant(this._raw);
 
   /// Retrieves the Merchant PAN (Primary Account Number) from the QR code data.
   ///
-  /// The PAN is first attempted to be extracted from tag `26`, and if it's not available,
-  /// it will check tag `51`. These are the standard tags where the Merchant PAN is typically stored.
+  /// The Merchant PAN is typically found in sub-tag `01` within the QR data tags `26` to `45`.
+  /// The function will first attempt to extract the PAN from tag `26`, and if it's not available,
+  /// it will proceed to check tag `51`. These are the standard tags where the Merchant PAN is stored.
   ///
   /// ### Returns:
-  /// - The Merchant PAN as a string if available, or `null` if not found.
+  /// - The Merchant PAN as a string if available, or an empty string (`''`) if not found.
+  ///   The value is taken from QR data tag `26` to `45`, specifically sub-tag `01`.
+  ///
+  /// ### Example:
+  /// ```dart
+  /// String pan = QRISMPM(qrData).merchant.pan;
+  /// print(pan); // "936008860000000042" or an empty string if not found
+  /// ```
   String get pan {
-    return _raw['merchant_information_26']?['merchant_pan'] ??
-        _raw['merchant_information_51']?['merchant_pan'] ??
-        '';
+    for (var tagId in _baseTagIds) {
+      var mPAN = _raw['merchant_information_$tagId'];
+
+      if (mPAN != null && mPAN['merchant_pan'] != null) {
+        String merchantPan = mPAN['merchant_pan'];
+        return merchantPan;
+      }
+    }
+
+    // Return an empty string if merchant_pan is not found
+    return '';
   }
 
   /// Validates the Merchant PAN using the Luhn Algorithm.
@@ -45,9 +64,8 @@ class Merchant {
   /// - `true` if the PAN is valid according to the Luhn algorithm.
   /// - `false` if the PAN is invalid or null.
   bool isPanValid() {
-    final panCode = pan;
-    if (panCode.isNotEmpty) {
-      return panCode.calculateMod10() == 0;
+    if (pan.isNotEmpty) {
+      return pan.calculateMod10() == 0;
     }
     return false;
   }
@@ -60,13 +78,12 @@ class Merchant {
   /// - `true` if the PAN is valid according to the Luhn algorithm.
   /// - `false` if the PAN is invalid or null.
   bool isPanValidVerbose() {
-    final panCode = pan;
-    if (panCode.isNotEmpty) {
+    if (pan.isNotEmpty) {
       '----------------------------------------'.myLog();
-      'Starting PAN validation for: $panCode'.myLog();
+      'Starting PAN validation for: $pan'.myLog();
 
       // Perform the validation with verbose logging
-      final isValid = panCode.calculateMod10(verbose: true) == 0;
+      final isValid = pan.calculateMod10(verbose: true) == 0;
 
       'PAN Validation Result: ${isValid ? 'Valid' : 'Invalid'}'.myLog();
       '----------------------------------------'.myLog();
@@ -77,17 +94,22 @@ class Merchant {
     return false;
   }
 
-  /// Retrieves the Merchant Sequence from the PAN.
+  /// Retrieves the Merchant Sequence from the PAN (Primary Account Number).
   ///
-  /// The Merchant Sequence is derived by extracting characters starting from the 9th character
-  /// (index 8) up to the second-to-last character of the PAN.
+  /// The Merchant Sequence is extracted from the 9th character (index 8) to the second-to-last character
+  /// of the PAN. If the PAN is too short (less than 9 characters) or empty, it returns `null`.
   ///
   /// ### Returns:
-  /// - The Merchant Sequence as a string, or `null` if the PAN is too short to extract.
+  /// - The Merchant Sequence as a string, or `null` if the PAN is too short or empty.
+  ///
+  /// ### Example:
+  /// ```dart
+  /// String? sequence = QRISMPM(qrData).merchant.merchantSequence;
+  /// print(sequence); // "860000000042" or null
+  /// ```
   String? get merchantSequence {
-    final panCode = pan;
-    if (panCode.isNotEmpty && panCode.length > 9) {
-      return panCode.substring(8, panCode.length - 1);
+    if (pan.isNotEmpty && pan.length > 9) {
+      return pan.substring(8, pan.length - 1);
     }
     return null;
   }
@@ -99,24 +121,42 @@ class Merchant {
   /// ### Returns:
   /// - The check digit as an integer, or `null` if the PAN is empty or null.
   int? get checkDigit {
-    final panCode = pan;
-    if (panCode.isNotEmpty) {
-      return int.tryParse(panCode[panCode.length - 1]);
+    if (pan.isNotEmpty) {
+      return int.tryParse(pan[pan.length - 1]);
     }
     return null;
   }
 
-  /// Retrieves the Merchant ID from the QR code data.
+  /// Retrieves the Merchant ID (MID) from the QR code data.
   ///
-  /// The Merchant ID is typically found in tags `26` or `51`. This method first checks tag `51`,
-  /// and if not found, falls back to tag `26`.
+  /// The Merchant ID (MID) is located in sub-tag `02` within the merchant information tags. The tags
+  /// to be checked are `26`, `27`, `50`, and `51`. The MID is retrieved from the tag where it is found.
+  ///
+  /// The MID will be returned as a string:
+  /// - If the MID is found and is less than 15 characters, it will be right-padded with spaces to ensure
+  ///   it is exactly 15 characters long.
+  /// - If the MID is 15 characters or longer, it will be returned as-is (without truncation).
+  /// - If the MID is not found in any of the tags, an empty string is returned.
   ///
   /// ### Returns:
-  /// - The Merchant ID as a string if found, or `null` if not available.
+  /// - A string containing the Merchant ID (MID), with any leading or trailing spaces removed.
+  ///   If the MID is not found, an empty string is returned.
+  ///
+  /// ### Example:
+  /// ```dart
+  /// String mid = QRISMPM(qrData).merchant.merchantId;
+  /// print(mid); // "133211213"
+  /// ```
   String get merchantId {
-    return _raw['merchant_information_51']?['merchant_id'] ??
-        _raw['merchant_information_26']?['merchant_id'] ??
-        '';
+    for (var tagId in _baseTagIds) {
+      var merchantData = _raw['merchant_information_$tagId'];
+      if (merchantData != null && merchantData['merchant_id'] != null) {
+        String merchantId = merchantData['merchant_id'];
+        return merchantId;
+      }
+    }
+
+    return '';
   }
 
   /// Determines the Merchant Payment Method based on the 9th character of the PAN.
@@ -131,6 +171,12 @@ class Merchant {
   ///   - [PANMerchantMethod.credit]
   ///   - [PANMerchantMethod.electronicMoney]
   ///   - [PANMerchantMethod.rfu] (reserved for future use)
+  ///
+  /// - B 'RAW' value of the 9th character of the PAN.
+  ///   - `0` for `unspecified`.
+  ///   - `1` for `debit`.
+  ///   - `2` for `credit`.
+  ///   - `3` for `electronicMoney`.
   PANMerchantMethod get panMerchantMethod {
     final panCode = pan;
     if (panCode.isNotEmpty && panCode.length >= 9) {
@@ -153,42 +199,76 @@ class Merchant {
     return PANMerchantMethod.unspecified;
   }
 
-  /// Retrieves the National Merchant ID from tag `51`.
+  /// Retrieves the National Merchant ID from tag `51`, sub tag `02`.
   ///
-  /// The National Merchant ID is typically found in tag `51`. If it's not available, `null` is returned.
+  /// The National Merchant ID is typically found in tag `51`. If it's not available, `''` or String empty is returned.
   ///
   /// ### Returns:
+  /// - Example: `ID1019000999007`
   /// - The National Merchant ID as a string, or `null` if not found.
-  String get nationalMerchantId =>
-      _raw['merchant_information_51']?['merchant_id'] ?? '';
+  String get nationalMerchantId {
+    final merchantInfo51 = _raw['merchant_information_51'];
+    final nMID = merchantInfo51?['merchant_id'];
 
-  /// Extracts the Issuer's National Numbering System (NNS) from the PAN.
-  ///
-  /// The NNS is represented by the first 8 characters of the PAN, typically used to identify the issuer.
-  ///
-  /// ### Returns:
-  /// - The Issuer's NNS as a string, or `null` if the PAN is too short to extract.
-  String get issuerNns {
-    final panCode = pan;
-    if (panCode.isNotEmpty) {
-      return panCode.length >= 8 ? panCode.substring(0, 8) : "";
-    } else {
-      return "";
+    if (nMID != null && nMID.isNotEmpty) {
+      return nMID;
     }
+
+    return '';
   }
 
-  /// Retrieves the Merchant Criteria from the QR code data.
+  /// Extracts the Issuer's National Numbering System (NNS) from the Primary Account Number (PAN).
   ///
-  /// The Merchant Criteria is usually found in tags `26` or `51`. This method checks tag `26` first,
-  /// and if not available, falls back to tag `51`.
+  /// The NNS is represented by the first 8 characters of the PAN. It is commonly used to identify the financial institution or issuer of the PAN.
+  ///
+  /// ### Parameters:
+  /// - `pan`: A string representing the Primary Account Number (PAN).
   ///
   /// ### Returns:
-  /// - The Merchant Criteria as a string, or `null` if not found.
+  /// - A string containing the Issuer's NNS if the PAN is not null and has at least 8 characters.
+  /// - Returns `null` if the PAN is null or shorter than 8 characters.
+  String get issuerNns {
+    if (pan.isNotEmpty && pan.length >= 8) {
+      return pan.substring(0, 8);
+    }
+    return '';
+  }
+
+  /// Retrieves the Merchant Criteria (MC) from the QR code data.
+  ///
+  /// The Merchant Criteria is used to identify the type of transaction or payment method. There are two main
+  /// cases for retrieving the merchant criteria:
+  /// - For **Payment Credit with Inquiry MPAN**, the value is taken from the inquiry MPAN response.
+  /// - For **Payment Credit without Inquiry MPAN**, the value is taken from the QR data tag `26` to `45`, specifically sub-tag `03`.
+  ///
+  /// The function will check the `merchant_criteria` field in the following tags:
+  /// - Tag `26`
+  /// - Tag `27`
+  /// - Tag `50`
+  /// - Tag `51`
+  ///
+  /// If the `merchant_criteria` is found, it will be converted to a `MerchantCriteria` enum value. If no valid
+  /// `merchant_criteria` is found, it will default to `MerchantCriteria.regular`.
+  ///
+  /// ### Returns:
+  /// - A `MerchantCriteria` enum value based on the retrieved criteria. If no criteria is found, it returns
+  ///   `MerchantCriteria.regular` as the default.
+  ///
+  /// ### Example:
+  /// ```dart
+  /// MerchantCriteria criteria = QRISMPM(qrData).merchant.merchantCriteria;
+  /// print(criteria); // MerchantCriteria.regular or another value depending on the QR data
+  /// ```
   MerchantCriteria get merchantCriteria {
-    return (_raw['merchant_information_26']?['merchant_criteria'] ??
-            _raw['merchant_information_51']?['merchant_criteria'])
-        .toString()
-        .toMerchantCriteria;
+    for (var tagId in _baseTagIds) {
+      var merchantData = _raw['merchant_information_$tagId'];
+      if (merchantData != null && merchantData['merchant_criteria'] != null) {
+        String criteria = merchantData['merchant_criteria'];
+        return criteria.toMerchantCriteria;
+      }
+    }
+
+    return MerchantCriteria.regular;
   }
 
   /// Retrieves the Merchant's Name from the QR code data.
@@ -307,7 +387,7 @@ class Merchant {
   ///
   /// ### Returns:
   /// - A Map with snake_case keys and corresponding values.
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> _toMap() {
     return {
       'merchant_pan': pan,
       'merchant_pan_valid': isPanValid(),
@@ -318,7 +398,7 @@ class Merchant {
       'pan_merchant_method': panMerchantMethod.paymentMethodCode,
       'national_merchant_id': nationalMerchantId,
       'issuer_nns': issuerNns,
-      'merchant_criteria': merchantCriteria.toString(),
+      'merchant_criteria': merchantCriteria.originalName,
       'merchant_name': name,
       'merchant_location': location.toMap(),
       'institution_code': institutionCode,
@@ -332,16 +412,14 @@ class Merchant {
 
   @override
   String toString() {
-    final json = toMap();
-    json['pan_merchant_method'] = panMerchantMethod.name;
-    json['merchant_criteria'] = merchantCriteria.name;
-    json['location'] = json['location'].toPrettyString();
+    final json = _toMap();
+    json['pan_merchant_method'] = panMerchantMethod.name.toUpperCase();
 
     return json.toPrettyString();
   }
 
   @visibleForTesting
   void logDebugMerchant() {
-    return toMap().toPrettyString().myLog();
+    return toString().myLog();
   }
 }

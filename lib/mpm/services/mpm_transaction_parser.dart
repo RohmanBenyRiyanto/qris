@@ -1,21 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_qris/qris.dart';
 
-class MpmTip {
-  final Map<String, dynamic> data;
+class Transaction {
+  final Map<String, dynamic> _raw;
 
-  MpmTip(this.data);
+  Transaction(this._raw);
 
   TipIndicator get indicator =>
-      data['tip_indicator'].toString().toTipIndicator();
-  num get transactionAmount => data.containsKey('transaction_amount')
-      ? num.tryParse((data['transaction_amount'] ?? '0').toString()) ?? 0
+      _raw['tip_indicator'].toString().toTipIndicator();
+  num get transactionAmount => _raw.containsKey('transaction_amount')
+      ? num.tryParse((_raw['transaction_amount'] ?? '0').toString()) ?? 0
       : 0;
-  num get fixedTipAmount => data.containsKey('fixed_tip_amount')
-      ? num.tryParse((data['fixed_tip_amount'] ?? '0').toString()) ?? 0
+  num get fixedTipAmount => _raw.containsKey('fixed_tip_amount')
+      ? num.tryParse((_raw['fixed_tip_amount'] ?? '0').toString()) ?? 0
       : 0;
-  num get percentageTipAmount => data.containsKey('percentage_tip_amount')
-      ? num.tryParse((data['percentage_tip_amount'] ?? '0').toString()) ?? 0
+  num get percentageTipAmount => _raw.containsKey('percentage_tip_amount')
+      ? num.tryParse((_raw['percentage_tip_amount'] ?? '0').toString()) ?? 0
       : 0;
   num get tipCalculated =>
       _calculateTipValue(

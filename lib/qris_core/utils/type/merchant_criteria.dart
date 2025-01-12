@@ -33,7 +33,7 @@ extension MerchantCriteriaExtension on MerchantCriteria {
   /// - [MerchantCriteria.medium] -> "UME"
   /// - [MerchantCriteria.large] -> "UBE"
   /// - [MerchantCriteria.regular] -> "URE"
-  String get criteriaString {
+  String get originalName {
     switch (this) {
       case MerchantCriteria.micro:
         return 'UMI';
@@ -68,8 +68,7 @@ extension MerchantCriteriaExtension on MerchantCriteria {
     };
 
     // Match the string representation of the criteria to the MDR percentage
-    return mdrPercentages[criteriaString] ??
-        0.0; // Return 0.0 if no match found
+    return mdrPercentages[originalName] ?? 0.0; // Return 0.0 if no match found
   }
 }
 

@@ -65,8 +65,8 @@ class QRISMPM with TLVService, MPMTagParser, CRCParser {
 
   /// The transaction details including any tips.
   ///
-  /// Returns an instance of [MpmTip], parsed from the QRIS data.
-  MpmTip get tip => MpmTip(tlvtoMap(tlv));
+  /// Returns an instance of [Transaction], parsed from the QRIS data.
+  Transaction get transaction => Transaction(tlvtoMap(tlv));
 
   /// The merchant information parsed from the QRIS data.
   ///
