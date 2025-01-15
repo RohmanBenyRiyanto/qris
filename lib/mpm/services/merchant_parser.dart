@@ -312,12 +312,14 @@ class Merchant {
   /// This method formats the Acquirer Name by removing common prefixes (e.g., `ID.`, `BANK.`)
   /// and non-alphanumeric characters, making the name cleaner and more readable.
   ///
+  /// Data source: `Tag: 26/27` sub tag `Sub tag 00`
+  ///
   /// ### Returns:
   /// - The formatted Acquirer Name as a string.
   String get acquirerName {
     String rawName = _raw['merchant_information_26']
             ?['global_unique_identifier'] ??
-        _raw['merchant_information_51']?['global_unique_identifier'] ??
+        _raw['merchant_information_27']?['global_unique_identifier'] ??
         '';
 
     final prefixesToRemove = [

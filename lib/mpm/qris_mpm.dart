@@ -11,6 +11,10 @@ part 'utils/qris_mpm_extension.dart';
 /// A class representing a QRIS Merchant Presented Mode (MPM) QR code data with functionalities
 /// for decoding and encoding QRIS data. This class decodes the QRIS data string into TLV format
 /// and provides access to various QRIS tags, merchant information, and transaction details.
+///
+/// Parameters:
+/// - `qrData`: The raw QRIS data string that represents the QR code data.
+/// - `validateMandatoryTAGs`: Whether to validate mandatory tags in the QRIS data.
 class QRISMPM with TLVService, MPMTagParser, CRCParser {
   /// The raw QRIS data string that represents the QR code data.
   ///
@@ -18,10 +22,16 @@ class QRISMPM with TLVService, MPMTagParser, CRCParser {
   @override
   final String qrData;
 
+  /// Whether to validate mandatory tags in the QRIS data.
+  final bool validateMandatoryTAGs;
+
   /// Constructs a [QRISMPM] instance by initializing the QRIS data and decoding it into TLV format.
   ///
   /// Throws a [TLVException] if the QRIS data is null or empty.
-  QRISMPM(this.qrData) {
+  QRISMPM(
+    this.qrData, {
+    this.validateMandatoryTAGs = true,
+  }) {
     _initialDecodeTLVData();
   }
 
@@ -110,9 +120,12 @@ class QRISMPM with TLVService, MPMTagParser, CRCParser {
     }
 
     try {
-      if (!_isValidQRIS(qrData)) {
-        tlv = [];
-        throw TLVException('QRIS data is invalid');
+      //! Check if the QRIS data is valid
+      if (validateMandatoryTAGs) {
+        if (!_isValidQRIS(qrData)) {
+          tlv = [];
+          throw TLVException('QRIS data is invalid');
+        }
       }
 
       tlv = tlvDecode(qrData);
@@ -123,6 +136,9 @@ class QRISMPM with TLVService, MPMTagParser, CRCParser {
     }
   }
 
+  /// Validates the QRIS data format
+  ///
+  /// References: https://www.greyamp.com/blogs/decoding-aspi-standards-the-technical-backbone-of-qris-in-indonesia
   bool _isValidQRIS(String qrData) {
     if (qrData.isEmpty || qrData.length < 10) {
       return false; // QRIS data is too short or empty
@@ -173,11 +189,10 @@ class QRISMPM with TLVService, MPMTagParser, CRCParser {
         return false; // Tag 60 is either missing or does not have a length of 15
       }
 
-      //!  SKIP TAG 63 as CRC
-      // String? tag63 = tlv.getValueByTag("63"); // Tag 63
-      // if (tag63 == null || tag63.length > 4) {
-      //   return false; // Tag 63 is either missing or too long
-      // }
+      String? tag63 = tlv.getValueByTag("63"); // Tag 63
+      if (tag63 == null || tag63.length > 4) {
+        return false; // Tag 63 is either missing or too long
+      }
 
       return true;
     } catch (e) {

@@ -1,5 +1,14 @@
 # CHANGELOG - Flutter QRIS
 
+## [1.0.1+4]
+
+### Release Date: 2025-01-15
+
+### Release Log:
+
+- **Add Conditional Mandatory Fields**: Added support for conditional mandatory fields in the QRIS MPM decoder.
+- **Improve Merchant Detail Parser**: Refined the merchant data parser for more accurate merchant details.
+
 ## [1.0.1+3]
 
 ### Release Date: 2025-01-12
