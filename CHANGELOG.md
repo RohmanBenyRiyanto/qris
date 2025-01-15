@@ -8,6 +8,7 @@
 
 - **Add Conditional Mandatory Fields**: Added support for conditional mandatory fields in the QRIS MPM decoder.
 - **Improve Merchant Detail Parser**: Refined the merchant data parser for more accurate merchant details.
+- **Updated SDK Range**: Minimum Dart SDK version updated to `2.19.0`, maximum set to `<4.0.0`.
 
 ## [1.0.1+3]
 
