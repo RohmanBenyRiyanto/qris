@@ -32,14 +32,17 @@ class Merchant {
   /// The function will first attempt to extract the PAN from tag `26`, and if it's not available,
   /// it will proceed to check tag `51`. These are the standard tags where the Merchant PAN is stored.
   ///
+  /// ### PAN Validation:
+  /// - This PAN is not checked for validity, for validation use the `isPanValid` method.
+  ///
   /// ### Returns:
-  /// - The Merchant PAN as a string if available, or an empty string (`''`) if not found.
+  /// - The Merchant PAN as a string if available and, or an empty string (`''`) if not found or invalid.
   ///   The value is taken from QR data tag `26` to `45`, specifically sub-tag `01`.
   ///
   /// ### Example:
   /// ```dart
   /// String pan = QRISMPM(qrData).merchant.pan;
-  /// print(pan); // "936008860000000042" or an empty string if not found
+  /// print(pan); // "936008860000000042" if valid, or an empty string if not found or invalid.
   /// ```
   String get pan {
     for (var tagId in _baseTagIds) {
@@ -55,6 +58,41 @@ class Merchant {
     return '';
   }
 
+  /// Retrieves the Merchant PAN (Primary Account Number) with the check digit appended.
+  ///
+  /// The Merchant PAN is first extracted using the `pan` getter, and if available, the check digit
+  /// is calculated and appended to the PAN. This provides the full PAN, including the Luhn check digit.
+  ///
+  /// ### PAN Validation:
+  /// - The base PAN (retrieved from the `pan` getter)
+  /// - If the base PAN is valid, the check digit is appended to the PAN.
+  /// - If the base PAN is invalid, the base PAN is returned without appending the check digit.
+  /// - If the base PAN is not available, an empty string (`''`) is returned.
+  ///
+  /// ### Check Digit Calculation:
+  /// - The check digit is computed using the Luhn algorithm and ensures the validity of the full PAN when used for processing.
+  ///
+  /// ### Returns:
+  /// - The full Merchant PAN as a string (18 digits + 1 check digit = 19 digits total), or an empty string (`''`) if the base PAN is not found or invalid.
+  ///
+  /// ### Example:
+  /// ```dart
+  /// String fullPan = QRISMPM(qrData).merchant.panWithCheckDigit;
+  /// print(fullPan); // "9360088600000000423" if valid, or an empty string if not found or invalid.
+  /// ```
+  String get panWithCheckDigit {
+    if (pan.isNotEmpty) {
+      final digit = pan.calculateCheckDigit();
+      final valid = isPanValid();
+      if (!valid) {
+        return pan;
+      } else {
+        return pan + digit.toString();
+      }
+    }
+    return '';
+  }
+
   /// Validates the Merchant PAN using the Luhn Algorithm.
   ///
   /// The Luhn algorithm is used to validate the integrity of the PAN. This method checks if the PAN
@@ -63,9 +101,9 @@ class Merchant {
   /// ### Returns:
   /// - `true` if the PAN is valid according to the Luhn algorithm.
   /// - `false` if the PAN is invalid or null.
-  bool isPanValid() {
+  bool isPanValid({bool checkLuhn = true}) {
     if (pan.isNotEmpty) {
-      return pan.calculateMod10() == 0;
+      return pan.isValidPAN(checkLuhn: checkLuhn);
     }
     return false;
   }
@@ -77,18 +115,9 @@ class Merchant {
   /// ### Returns:
   /// - `true` if the PAN is valid according to the Luhn algorithm.
   /// - `false` if the PAN is invalid or null.
-  bool isPanValidVerbose() {
+  bool isPanValidVerbose({bool checkLuhn = true}) {
     if (pan.isNotEmpty) {
-      '----------------------------------------'.myLog();
-      'Starting PAN validation for: $pan'.myLog();
-
-      // Perform the validation with verbose logging
-      final isValid = pan.calculateMod10(verbose: true) == 0;
-
-      'PAN Validation Result: ${isValid ? 'Valid' : 'Invalid'}'.myLog();
-      '----------------------------------------'.myLog();
-
-      return isValid;
+      return pan.isValidPAN(verbose: true, checkLuhn: checkLuhn);
     }
     'PAN is null or empty.'.myLog();
     return false;
@@ -116,13 +145,35 @@ class Merchant {
 
   /// Retrieves the check digit from the PAN.
   ///
+  /// The check digit is the last digit of the PAN, which is used for validation purposes.<br>
+  /// If the PAN is empty, null or invalid, it returns `null`.
+  ///
+  /// ### Returns:
+  /// - The check digit as an integer, or `null` if the PAN is empty or null.
+  int? get checkPanDigit {
+    if (pan.isNotEmpty) {
+      final isValid = isPanValid();
+      if (!isValid) {
+        return null;
+      } else {
+        return pan.calculateCheckDigit();
+      }
+    }
+    return null;
+  }
+
+  /// Retrieves the check digit from the PAN with verbose logging.
+  ///
   /// The check digit is the last digit of the PAN, which is used for validation purposes.
   ///
   /// ### Returns:
   /// - The check digit as an integer, or `null` if the PAN is empty or null.
-  int? get checkDigit {
+  int? get checkPanDigitVerbose {
     if (pan.isNotEmpty) {
-      return int.tryParse(pan[pan.length - 1]);
+      if (!isPanValid()) {
+        return null;
+      }
+      return pan.calculateCheckDigit(verbose: true);
     }
     return null;
   }
@@ -392,10 +443,12 @@ class Merchant {
   Map<String, dynamic> _toMap() {
     return {
       'merchant_pan': pan,
+      'merchant_pan_with_check_digit': panWithCheckDigit,
       'merchant_pan_valid': isPanValid(),
       'merchant_pan_valid_verbose': isPanValidVerbose(),
       'merchant_sequence': merchantSequence,
-      'merchant_check_digit': checkDigit,
+      'merchant_check_digit': checkPanDigit,
+      'merchant_check_digit_verbose': checkPanDigitVerbose,
       'merchant_id': merchantId,
       'pan_merchant_method': panMerchantMethod.paymentMethodCode,
       'national_merchant_id': nationalMerchantId,

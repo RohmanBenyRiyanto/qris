@@ -1,42 +1,36 @@
 import 'package:flutter_qris/qris.dart';
 
-extension LuhnAlgorithmExtension on String {
-  int calculateMod10({bool verbose = false}) {
-    final modSum = computeMod10Sum(verbose: verbose);
-    final result = modSum % 10;
+extension Logger on String {
+  bool isValidPAN({bool verbose = false, checkLuhn = true}) {
+    String pan = this;
+    int? digits;
 
-    if (verbose) {
-      '----------------------------------------'.myLog();
-      'calculateMod10: $modSum % 10 = $result'.myLog();
-      '----------------------------------------'.myLog();
+    if (checkLuhn) {
+      digits = pan.calculateCheckDigit();
+      pan = pan + digits.toString();
     }
 
-    return result;
-  }
-
-  int computeMod10Sum({bool verbose = false}) {
-    if (RegExp(r'\D').hasMatch(this)) {
-      throw ArgumentError.value(
-          this, 'String', 'is not a valid numeric string');
-    }
-
-    final length = this.length;
-    int sum = 0;
-    bool doubleDigit = false;
-
+    // Log the start of the validation
     if (verbose) {
       '----------------------------------------'.myLog();
-      'Processing PAN: $this'.myLog();
+      'Starting PAN validation for: $pan'.myLog();
       '----------------------------------------'.myLog();
       '| Index | Digit | Processed | Sum      |'.myLog();
       '|-------|-------|-----------|----------|'.myLog();
     }
 
+    if (!RegExp(r'^\d+$').hasMatch(pan)) {
+      return false;
+    }
+
+    int sum = 0;
+    bool isSecondDigit = false;
+
     for (int i = length - 1; i >= 0; i--) {
-      final digit = int.parse(this[i]);
+      int digit = int.parse(pan[i]);
       int processedDigit = digit;
 
-      if (doubleDigit) {
+      if (isSecondDigit) {
         processedDigit *= 2;
         if (processedDigit > 9) {
           processedDigit -= 9;
@@ -44,16 +38,70 @@ extension LuhnAlgorithmExtension on String {
       }
 
       sum += processedDigit;
-      doubleDigit = !doubleDigit;
 
       if (verbose) {
         '| ${i.toString().padLeft(5)} | ${digit.toString().padLeft(5)} | ${processedDigit.toString().padLeft(9)} | ${sum.toString().padLeft(8)} |'
             .myLog();
       }
+
+      isSecondDigit = !isSecondDigit;
     }
 
-    if (verbose) {}
+    bool isValid = sum % 10 == 0;
+    if (verbose) {
+      '----------------------------------------'.myLog();
+      'PAN Validation Result: ${isValid ? 'Valid' : 'Invalid'}'.myLog();
+      '----------------------------------------'.myLog();
+    }
 
-    return sum;
+    return isValid;
+  }
+
+  int calculateCheckDigit({bool verbose = false}) {
+    if (verbose) {
+      '----------------------------------------'.myLog();
+      'Calculating Check Digit for: $this'.myLog();
+      '----------------------------------------'.myLog();
+      '| Index | Digit | Processed | Sum      |'.myLog();
+      '|-------|-------|-----------|----------|'.myLog();
+    }
+
+    if (!RegExp(r'^\d+$').hasMatch(this)) {
+      throw ArgumentError("PAN number must contain only digits.");
+    }
+
+    int sum = 0;
+    bool isSecondDigit = true;
+
+    for (int i = length - 1; i >= 0; i--) {
+      int digit = int.parse(this[i]);
+      int processedDigit = digit;
+
+      if (isSecondDigit) {
+        processedDigit *= 2;
+        if (processedDigit > 9) {
+          processedDigit -= 9;
+        }
+      }
+
+      sum += processedDigit;
+
+      if (verbose) {
+        '| ${i.toString().padLeft(5)} | ${digit.toString().padLeft(5)} | ${processedDigit.toString().padLeft(9)} | ${sum.toString().padLeft(8)} |'
+            .myLog();
+      }
+
+      isSecondDigit = !isSecondDigit;
+    }
+
+    int checkDigit = (10 - (sum % 10)) % 10;
+
+    if (verbose) {
+      '----------------------------------------'.myLog();
+      'calculateMod10: $sum % 10 = $checkDigit'.myLog();
+      '----------------------------------------'.myLog();
+    }
+
+    return checkDigit;
   }
 }

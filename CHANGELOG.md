@@ -1,5 +1,16 @@
 # CHANGELOG - Flutter QRIS
 
+## [1.0.1+5]
+
+### Release Date: 2025-01-24
+
+### Release Log:
+
+- **Update Luhn Algorithm**: Updated the Luhn algorithm to support additional PAN lengths.
+- **Update PAN Validation**: Improved the PAN validation to handle PANs with different lengths.
+- **Update PAN Check Digit Calculation**: Added support for calculating the check digit for PANs with different lengths.
+- **ADD PAN Check Digit String Getter**: Added a getter for the check digit string for PANs with different lengths.
+
 ## [1.0.1+4]
 
 ### Release Date: 2025-01-15
