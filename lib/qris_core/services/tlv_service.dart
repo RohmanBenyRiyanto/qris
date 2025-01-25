@@ -48,7 +48,7 @@ mixin TLVService {
         index += 2;
 
         if (!_isValidTag(tag)) {
-          'Invalid tag: $tag, skipping...'.myLog();
+          'Invalid tag: $tag, skipping...'.qrLog();
           index += 2; // Skip length (2 digits) and value (based on length)
 
           //! DISABLED for This Version
@@ -91,7 +91,7 @@ mixin TLVService {
     }
   }
 
-  bool _isValidTag(String tag) {
+  static bool _isValidTag(String tag) {
     // Validate that tag is a number between "00" and "99"
     return int.tryParse(tag)?.between(0, 99) ?? false;
   }

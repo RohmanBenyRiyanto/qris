@@ -51,7 +51,7 @@ class MCC {
 
   @visibleForTesting
   void loglogDebugingMCC() {
-    return toJson().toPrettyString().myLog();
+    return toJson().toPrettyString().qrLog();
   }
 }
 

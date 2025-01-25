@@ -1,5 +1,17 @@
 # CHANGELOG - Flutter QRIS
 
+## [1.0.1+6]
+
+### Release Date: 2025-01-26
+
+### Changelog:
+
+- **Added getter method for retrieving values from sub-tags**:  
+  Introduced a new method that simplifies extracting values from nested or sub-tags, improving flexibility in handling complex QRIS data structures.
+
+- **Enhanced QRIS MPM mandatory tag validation**:  
+  Improved the QRIS MPM validation logic to ensure more efficient and accurate checks for mandatory tags, streamlining the validation process and reducing unnecessary computations.
+
 ## [1.0.1+5]
 
 ### Release Date: 2025-01-24

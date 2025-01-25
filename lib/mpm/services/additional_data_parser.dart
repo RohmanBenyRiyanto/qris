@@ -151,6 +151,6 @@ class AdditionalData with TLVService {
 
   @visibleForTesting
   void logDebugingAdditionalData() {
-    return toString().myLog();
+    return toString().qrLog();
   }
 }

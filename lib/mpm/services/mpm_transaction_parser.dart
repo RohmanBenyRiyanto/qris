@@ -55,6 +55,6 @@ class Transaction {
 
   @visibleForTesting
   void logDebugingTip() {
-    return toString().myLog();
+    return toString().qrLog();
   }
 }

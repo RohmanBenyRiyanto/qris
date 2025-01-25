@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 extension StringExtensionLog on String? {
-  void myLog() {
+  void qrLog() {
     if (kDebugMode) {
       debugPrint(this);
     }

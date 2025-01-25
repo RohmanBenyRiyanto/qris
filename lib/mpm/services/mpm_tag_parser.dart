@@ -25,7 +25,7 @@ mixin MPMTagParser on TLVService {
             resultMap[qrisTag.name] =
                 _decodeChildren(qrisTag.children, childTLVs);
           } catch (e) {
-            'Error decoding child tags for $tag: $e'.myLog();
+            'Error decoding child tags for $tag: $e'.qrLog();
           }
         } else {
           resultMap[qrisTag.name] = value;

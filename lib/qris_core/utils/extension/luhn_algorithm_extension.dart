@@ -1,6 +1,6 @@
 import 'package:flutter_qris/qris.dart';
 
-extension Logger on String {
+extension LuhnAlgorithmExtension on String {
   bool isValidPAN({bool verbose = false, checkLuhn = true}) {
     String pan = this;
     int? digits;
@@ -12,11 +12,11 @@ extension Logger on String {
 
     // Log the start of the validation
     if (verbose) {
-      '----------------------------------------'.myLog();
-      'Starting PAN validation for: $pan'.myLog();
-      '----------------------------------------'.myLog();
-      '| Index | Digit | Processed | Sum      |'.myLog();
-      '|-------|-------|-----------|----------|'.myLog();
+      '----------------------------------------'.qrLog();
+      'Starting PAN validation for: $pan'.qrLog();
+      '----------------------------------------'.qrLog();
+      '| Index | Digit | Processed | Sum      |'.qrLog();
+      '|-------|-------|-----------|----------|'.qrLog();
     }
 
     if (!RegExp(r'^\d+$').hasMatch(pan)) {
@@ -41,7 +41,7 @@ extension Logger on String {
 
       if (verbose) {
         '| ${i.toString().padLeft(5)} | ${digit.toString().padLeft(5)} | ${processedDigit.toString().padLeft(9)} | ${sum.toString().padLeft(8)} |'
-            .myLog();
+            .qrLog();
       }
 
       isSecondDigit = !isSecondDigit;
@@ -49,9 +49,9 @@ extension Logger on String {
 
     bool isValid = sum % 10 == 0;
     if (verbose) {
-      '----------------------------------------'.myLog();
-      'PAN Validation Result: ${isValid ? 'Valid' : 'Invalid'}'.myLog();
-      '----------------------------------------'.myLog();
+      '----------------------------------------'.qrLog();
+      'PAN Validation Result: ${isValid ? 'Valid' : 'Invalid'}'.qrLog();
+      '----------------------------------------'.qrLog();
     }
 
     return isValid;
@@ -59,11 +59,11 @@ extension Logger on String {
 
   int calculateCheckDigit({bool verbose = false}) {
     if (verbose) {
-      '----------------------------------------'.myLog();
-      'Calculating Check Digit for: $this'.myLog();
-      '----------------------------------------'.myLog();
-      '| Index | Digit | Processed | Sum      |'.myLog();
-      '|-------|-------|-----------|----------|'.myLog();
+      '----------------------------------------'.qrLog();
+      'Calculating Check Digit for: $this'.qrLog();
+      '----------------------------------------'.qrLog();
+      '| Index | Digit | Processed | Sum      |'.qrLog();
+      '|-------|-------|-----------|----------|'.qrLog();
     }
 
     if (!RegExp(r'^\d+$').hasMatch(this)) {
@@ -88,7 +88,7 @@ extension Logger on String {
 
       if (verbose) {
         '| ${i.toString().padLeft(5)} | ${digit.toString().padLeft(5)} | ${processedDigit.toString().padLeft(9)} | ${sum.toString().padLeft(8)} |'
-            .myLog();
+            .qrLog();
       }
 
       isSecondDigit = !isSecondDigit;
@@ -97,9 +97,9 @@ extension Logger on String {
     int checkDigit = (10 - (sum % 10)) % 10;
 
     if (verbose) {
-      '----------------------------------------'.myLog();
-      'calculateMod10: $sum % 10 = $checkDigit'.myLog();
-      '----------------------------------------'.myLog();
+      '----------------------------------------'.qrLog();
+      'calculateMod10: $sum % 10 = $checkDigit'.qrLog();
+      '----------------------------------------'.qrLog();
     }
 
     return checkDigit;

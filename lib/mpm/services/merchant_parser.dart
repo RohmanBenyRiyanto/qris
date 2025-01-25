@@ -119,7 +119,7 @@ class Merchant {
     if (pan.isNotEmpty) {
       return pan.isValidPAN(verbose: true, checkLuhn: checkLuhn);
     }
-    'PAN is null or empty.'.myLog();
+    'PAN is null or empty.'.qrLog();
     return false;
   }
 
@@ -475,6 +475,6 @@ class Merchant {
 
   @visibleForTesting
   void logDebugMerchant() {
-    return toString().myLog();
+    return toString().qrLog();
   }
 }

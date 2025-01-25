@@ -30,7 +30,7 @@ class QRISMPM with TLVService, MPMTagParser, CRCParser {
   /// Throws a [TLVException] if the QRIS data is null or empty.
   QRISMPM(
     this.qrData, {
-    this.validateMandatoryTAGs = true,
+    this.validateMandatoryTAGs = false,
   }) {
     _initialDecodeTLVData();
   }
@@ -121,11 +121,9 @@ class QRISMPM with TLVService, MPMTagParser, CRCParser {
 
     try {
       //! Check if the QRIS data is valid
-      if (validateMandatoryTAGs) {
-        if (!_isValidQRIS(qrData)) {
-          tlv = [];
-          throw TLVException('QRIS data is invalid');
-        }
+      if (!_isValidQRIS(qrData, validateMandatoryTAGs)) {
+        tlv = [];
+        throw TLVException('QRIS data is invalid');
       }
 
       tlv = tlvDecode(qrData);
@@ -139,64 +137,47 @@ class QRISMPM with TLVService, MPMTagParser, CRCParser {
   /// Validates the QRIS data format
   ///
   /// References: https://www.greyamp.com/blogs/decoding-aspi-standards-the-technical-backbone-of-qris-in-indonesia
-  bool _isValidQRIS(String qrData) {
+  bool _isValidQRIS(String qrData, bool validateMandatoryTAGs) {
     if (qrData.isEmpty || qrData.length < 10) {
       return false; // QRIS data is too short or empty
     }
 
     // 1. Check that the QRIS string starts with the correct prefix and contains "CO.QRIS.WWW"
     if (!qrData.startsWith("000201") || !qrData.contains("CO.QRIS.WWW")) {
-      return false; // Invalid QRIS prefix
-    }
-
-    try {
-      // 2. Try to decode the TLV data (this will throw an exception if the format is invalid)
-      List<TLV> tlv = tlvDecode(qrData);
-
-      // 3. Check for mandatory tags and their length constraints
-      String? tag00 = tlv.getValueByTag("00"); // Tag 00
-      if (tag00 == null || tag00.length > 2) {
-        return false; // Tag 00 is either missing or too long
-      }
-
-      String? tag51 = tlv.getValueByTag("51"); // Tag 51
-      if (tag51 == null || tag51.length > 99) {
-        return false; // Tag 51 is either missing or too long
-      }
-
-      String? tag52 = tlv.getValueByTag("52"); // Tag 52
-      if (tag52 == null || tag52.length > 4) {
-        return false; // Tag 52 is either missing or too long
-      }
-
-      String? tag53 = tlv.getValueByTag("53"); // Tag 53
-      if (tag53 == null || tag53.length > 3) {
-        return false; // Tag 53 is either missing or too long
-      }
-
-      String? tag58 = tlv.getValueByTag("58"); // Tag 58
-      if (tag58 == null || tag58.length > 2) {
-        return false; // Tag 58 is either missing or too long
-      }
-
-      String? tag59 = tlv.getValueByTag("59"); // Tag 59
-      if (tag59 == null || tag59.length > 25) {
-        return false; // Tag 59 is either missing or too long
-      }
-
-      String? tag60 = tlv.getValueByTag("60"); // Tag 60
-      if (tag60 == null || tag60.length > 15) {
-        return false; // Tag 60 is either missing or does not have a length of 15
-      }
-
-      String? tag63 = tlv.getValueByTag("63"); // Tag 63
-      if (tag63 == null || tag63.length > 4) {
-        return false; // Tag 63 is either missing or too long
-      }
-
-      return true;
-    } catch (e) {
       return false;
     }
+
+    if (validateMandatoryTAGs) {
+      try {
+        // 2. Decode the TLV data (this will throw an exception if the format is invalid)
+        List<TLV> tlv = tlvDecode(qrData);
+
+        // 3. Define a map for mandatory tags and their maximum lengths
+        final Map<String, int> mandatoryTags = {
+          "00": 2, // Tag 00: Max length 2
+          "51": 99, // Tag 51: Max length 99
+          "52": 4, // Tag 52: Max length 4
+          "53": 3, // Tag 53: Max length 3
+          "58": 2, // Tag 58: Max length 2
+          "59": 25, // Tag 59: Max length 25
+          "60": 15, // Tag 60: Max length 15
+          "63": 4, // Tag 63: Max length 4
+        };
+
+        // 4. Check each mandatory tag for its presence and length constraints
+        for (var entry in mandatoryTags.entries) {
+          String? value = tlv.getValueByTag(entry.key);
+          if (value == null || value.length > entry.value) {
+            return false;
+          }
+        }
+
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

@@ -63,6 +63,6 @@ mixin CRCParser {
 
   @visibleForTesting
   void logDebugingCRC() {
-    return 'CRC: $crc | CRC Valid: ${isValidCRC()}'.myLog();
+    return 'CRC: $crc | CRC Valid: ${isValidCRC()}'.qrLog();
   }
 }
