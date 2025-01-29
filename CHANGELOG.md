@@ -1,6 +1,15 @@
 # CHANGELOG - Flutter QRIS
 
-## [1.0.1+6]
+## [1.0.1+7]
+
+### Release Date: 2025-01-29
+
+### Changelog:
+
+- **Update MPM Data Validation**:  
+  Update MPM data validation in QRIS MPM tags.
+
+## [1.0.1+7]
 
 ### Release Date: 2025-01-26
 

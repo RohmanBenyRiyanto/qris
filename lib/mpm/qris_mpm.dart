@@ -142,12 +142,12 @@ class QRISMPM with TLVService, MPMTagParser, CRCParser {
       return false; // QRIS data is too short or empty
     }
 
-    // 1. Check that the QRIS string starts with the correct prefix and contains "CO.QRIS.WWW"
-    if (!qrData.startsWith("000201") || !qrData.contains("CO.QRIS.WWW")) {
-      return false;
-    }
-
     if (validateMandatoryTAGs) {
+      // 1. Check that the QRIS string starts with the correct prefix and contains "CO.QRIS.WWW"
+      if (!qrData.startsWith("000201") || !qrData.contains("CO.QRIS.WWW")) {
+        return false;
+      }
+
       try {
         // 2. Decode the TLV data (this will throw an exception if the format is invalid)
         List<TLV> tlv = tlvDecode(qrData);
@@ -176,8 +176,8 @@ class QRISMPM with TLVService, MPMTagParser, CRCParser {
       } catch (e) {
         return false;
       }
+    } else {
+      return true;
     }
-
-    return true;
   }
 }
