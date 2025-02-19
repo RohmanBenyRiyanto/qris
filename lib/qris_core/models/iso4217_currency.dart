@@ -140,9 +140,17 @@ class ISO4217Currency {
   static Map<String, dynamic> getCurrencyByNumCode(String code) {
     final currencies = ISO4217CurrencyData.currencyData();
     try {
-      final numCode = int.parse(code);
+      final numCode = int.tryParse(code) ?? -1;
       final currency = currencies.firstWhere(
-          (ISO4217Currency currency) => currency.numCode == numCode);
+        (ISO4217Currency currency) => currency.numCode == numCode,
+        orElse: () => ISO4217Currency(
+          code: '',
+          numCode: numCode,
+          digits: 0,
+          currencyName: 'Undefined',
+          locations: [''],
+        ),
+      );
       return currency.toJson();
     } catch (e) {
       return {};

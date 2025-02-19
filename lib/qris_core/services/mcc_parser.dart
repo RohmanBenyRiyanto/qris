@@ -56,7 +56,15 @@ extension MCCParser on QRISMPM {
   static Map<String, dynamic> _getMCCByCode([String? mccCode]) {
     return MccDataBase.dataList.firstWhere(
       (item) => item['mcc'] == mccCode,
-      orElse: () => {},
+      orElse: () => {
+        "mcc": mccCode ?? "",
+        "edited_description": "",
+        "combined_description": "",
+        "usda_description": "",
+        "irs_description": "",
+        "irs_reportable": "",
+        "id": -1,
+      },
     );
   }
 }

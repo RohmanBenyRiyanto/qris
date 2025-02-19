@@ -1,5 +1,14 @@
 # CHANGELOG - Flutter QRIS
 
+## [1.0.1+8]
+
+### Release Date: 2025-02-19
+
+### Changelog:
+
+- **Handled nullable MCC & Currency values:**
+  Set default values when MCC or Currency data is unavailable in Dataset.
+
 ## [1.0.1+7]
 
 ### Release Date: 2025-01-29
