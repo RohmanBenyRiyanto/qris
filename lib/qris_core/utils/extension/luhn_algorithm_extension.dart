@@ -26,7 +26,7 @@ extension LuhnAlgorithmExtension on String {
     int sum = 0;
     bool isSecondDigit = false;
 
-    for (int i = length - 1; i >= 0; i--) {
+    for (int i = pan.length - 1; i >= 0; i--) {
       int digit = int.parse(pan[i]);
       int processedDigit = digit;
 

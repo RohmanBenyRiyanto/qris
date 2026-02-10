@@ -443,7 +443,9 @@ class Merchant {
   Map<String, dynamic> _toMap() {
     return {
       'merchant_pan': pan,
+      'merchant_pan_length': pan.length,
       'merchant_pan_with_check_digit': panWithCheckDigit,
+      'merchant_pan_with_check_digit_length': panWithCheckDigit.length,
       'merchant_pan_valid': isPanValid(),
       'merchant_pan_valid_verbose': isPanValidVerbose(),
       'merchant_sequence': merchantSequence,

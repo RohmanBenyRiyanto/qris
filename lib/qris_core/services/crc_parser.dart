@@ -32,14 +32,14 @@ mixin CRCParser {
   /// - `true` if the CRC values match.
   /// - `false` otherwise.
   bool isValidCRC() {
-    final match = RegExp(r'(63\d{2})([0-9A-Fa-f]{4})\$').firstMatch(qrData);
+    final match = RegExp(r'(63\d{2})([0-9A-Fa-f]{4})$').firstMatch(qrData);
     final calculatedCRC = crc.toUpperCase();
     return match != null && match.group(2)?.toUpperCase() == calculatedCRC;
   }
 
   Future<bool> isValidCRCAsync() async {
     final calculatedCRC = await _calculateCRCAsyncHelper(qrData);
-    final match = RegExp(r'(63\d{2})([0-9A-Fa-f]{4})\$').firstMatch(qrData);
+    final match = RegExp(r'(63\d{2})([0-9A-Fa-f]{4})$').firstMatch(qrData);
     return match != null && match.group(2)?.toUpperCase() == calculatedCRC;
   }
 
