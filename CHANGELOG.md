@@ -1,5 +1,20 @@
 # CHANGELOG - Flutter QRIS
 
+## [1.0.2]
+
+### Release Date: 2025-02-10
+
+### Critical Bug Fixes:
+
+- **Fixed CRC Validation Regex Bug**:
+  Fixed incorrect regex pattern in CRC validation (`crc_parser.dart`). The regex was using `\$` in a raw string which matched a literal `$` character instead of end-of-string anchor. Changed from `r'(63\d{2})([0-9A-Fa-f]{4})\$'` to `r'(63\d{2})([0-9A-Fa-f]{4})$'`. This caused all valid QRIS codes to fail CRC validation.
+
+- **Fixed Luhn Algorithm PAN Validation Bug**:
+  Fixed critical bug in Luhn algorithm validation (`luhn_algorithm_extension.dart`). The loop was using `length - 1` (original PAN length) instead of `pan.length - 1` (PAN with check digit), causing the check digit to be excluded from validation. This resulted in all valid PANs being incorrectly marked as invalid.
+
+### Impact:
+These fixes resolve validation failures for legitimate QRIS codes. All real QRIS data should now validate correctly.
+
 ## [1.0.1+8]
 
 ### Release Date: 2025-02-19
