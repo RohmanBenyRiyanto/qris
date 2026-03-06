@@ -53,6 +53,7 @@ abstract class QrisMpmTags {
       QrisTag(id: '00', name: 'global_unique_identifier'),
       QrisTag(id: '01', name: 'merchant_pan'),
       QrisTag(id: '02', name: 'merchant_id'),
+      QrisTag(id: '04', name: 'merchant_principal_mastercard'),
       merchantCriteria,
     ],
   );
