@@ -1,0 +1,27 @@
+name: flutter_qris
+version: 1.0.2
+description: "A Flutter library for decoding and processing QRIS (Quick Response Code Indonesian Standard) data, designed for payment applications."
+homepage: "https://github.com/RohmanBenyRiyanto/qris"
+repository: "https://github.com/RohmanBenyRiyanto/qris"
+issue_tracker: "https://github.com/RohmanBenyRiyanto/qris/issues"
+documentation: "https://github.com/RohmanBenyRiyanto/qris/blob/main/README.md"
+environment:
+  sdk: ">=2.19.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  crclib: ^3.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+topics:
+  - qris
+  - qris-library
+  - qris-decoder
+  - quick-response-code
+  - payment-processing
