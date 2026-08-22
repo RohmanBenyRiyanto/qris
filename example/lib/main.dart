@@ -14,9 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter QRIS Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: MyHomePage(),
     );
   }
@@ -36,9 +34,7 @@ class MyHomePage extends StatelessWidget {
     // "fewijnfjnfjif2";
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('QRIS Example'),
-      ),
+      appBar: AppBar(title: Text('QRIS Example')),
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
