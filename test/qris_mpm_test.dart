@@ -44,7 +44,7 @@ void main() {
       final String invalidData = "fewijnfjnfjif2";
 
       try {
-        QRISMPM(invalidData);
+        QRISMPM(invalidData, validateMandatoryTAGs: true);
         // If no exception is thrown, the test should fail
         fail('Expected TLVException or an error but none occurred.');
       } on TLVException catch (e) {
